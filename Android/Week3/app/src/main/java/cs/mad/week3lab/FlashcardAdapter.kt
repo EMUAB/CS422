@@ -1,5 +1,6 @@
 package cs.mad.week3lab
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +21,6 @@ class FlashcardAdapter : RecyclerView.Adapter<FlashcardAdapter.ViewHolder>() {
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-
         // connect data to view
         holder.cardText.text = data[position].term
     }
