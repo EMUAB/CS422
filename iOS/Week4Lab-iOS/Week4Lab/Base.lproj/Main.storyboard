@@ -222,6 +222,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Term" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRh-H2-oQq">
                                 <rect key="frame" x="162.66666666666666" y="406.66666666666669" width="68" height="39"/>
+                                <gestureRecognizers/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -273,6 +274,12 @@
                             <constraint firstItem="yh3-IL-c6G" firstAttribute="centerX" secondItem="ts2-By-I2b" secondAttribute="centerX" id="xqs-dD-tib"/>
                             <constraint firstItem="1Y1-IE-6D7" firstAttribute="trailing" secondItem="Qxh-vV-OcS" secondAttribute="trailing" constant="30" id="zxV-aJ-3iN"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="ZTe-SW-dP9" appends="YES" id="h5W-IQ-zVt"/>
+                            <outletCollection property="gestureRecognizers" destination="FPl-EF-ROG" appends="YES" id="s7x-dR-I1z"/>
+                            <outletCollection property="gestureRecognizers" destination="bDQ-ai-kuS" appends="YES" id="TqX-Pe-dCf"/>
+                            <outletCollection property="gestureRecognizers" destination="jm1-Hp-VoL" appends="YES" id="wnh-iC-dIl"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="Ibf-iw-8nB"/>
                     <connections>
@@ -285,12 +292,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eLq-zP-odb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="ZTe-SW-dP9">
                     <connections>
-                        <action selector="screenPressed:" destination="dPK-kg-kOh" id="ZQi-4v-LjJ"/>
+                        <action selector="screenPressed:" destination="dPK-kg-kOh" id="E2p-pU-UiL"/>
                     </connections>
                 </tapGestureRecognizer>
-                <swipeGestureRecognizer direction="right" id="FPl-EF-ROG">
+                <swipeGestureRecognizer direction="right" id="FPl-EF-ROG" userLabel="Right Swipe Gesture Recognizer">
                     <connections>
-                        <action selector="screenSwiped:" destination="dPK-kg-kOh" id="1ui-Sr-p8Y"/>
+                        <action selector="swipeRight:" destination="dPK-kg-kOh" id="1RC-Ki-qjA"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="left" id="bDQ-ai-kuS" userLabel="Left Swipe Gesture Recognizer">
+                    <connections>
+                        <action selector="swipeLeft:" destination="dPK-kg-kOh" id="U8r-ia-gv0"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="up" id="jm1-Hp-VoL" userLabel="Up Swipe Gesture Recognizer">
+                    <connections>
+                        <action selector="swipeUp:" destination="dPK-kg-kOh" id="Ria-i7-8TU"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>

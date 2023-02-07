@@ -50,7 +50,7 @@ class FlashcardSetDetailViewController: UIViewController, UITableViewDelegate, U
                 self.flashcards[indexPath.row].definition = editAlert.textFields![1].text!
                 tableView.reloadData()
             }))
-            self.present(editAlert, animated: false)
+            self.present(editAlert, animated: true)
         }))
         present(flashcardAlert, animated: true)
     }

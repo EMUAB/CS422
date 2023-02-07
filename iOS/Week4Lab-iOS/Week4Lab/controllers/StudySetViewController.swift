@@ -28,22 +28,51 @@ class StudySetViewController: UIViewController  {
         termLabel.text = flashcards[0].term
     }
     
-    @IBAction func screenSwiped(_ sender: UISwipeGestureRecognizer) {
+    @IBAction func swipeUp(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended{
+            skip()
+        }
+    }
+    @IBAction func swipeRight(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            correct()
+        }
+    }
+    @IBAction func swipeLeft(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            missed()
+        }
+    }
+    @IBAction func screenPressed(_ sender: UITapGestureRecognizer) {
+        guard sender.view != nil else { return }
         
+        if sender.state == .ended {
+            termLabel.text = flashcards[currentPos].definition
+        }
     }
-    @IBAction func screenPressed(_ sender: Any) {
-        termLabel.text = flashcards[currentPos].definition
-    }
+    
     @IBAction func skipPressed(_ sender: Any) {
-        nextTerm()
+        skip()
     }
     @IBAction func missedPressed(_ sender: Any) {
+        missed()
+    }
+    @IBAction func correctPressed(_ sender: Any) {
+        correct()
+    }
+    
+    func skip() {
+        nextTerm()
+    }
+    
+    func missed() {
         flashcards[currentPos].missed = true
         missCount += 1
         missedLabel.text = "Missed: \(missCount)"
         nextTerm()
     }
-    @IBAction func correctPressed(_ sender: Any) {
+    
+    func correct() {
         if !flashcards[currentPos].missed {
             correctCount += 1
             correctLabel.text = "Correct: \(correctCount)"
@@ -60,12 +89,11 @@ class StudySetViewController: UIViewController  {
             currentPos = (currentPos + 1) % flashcards.count
             termLabel.text = flashcards[currentPos].term
         } else {
-            dismiss(animated: true)
-            termLabel.text = "shouldn't be readable"
+            quitStudying()
         }
     }
     
     func quitStudying() {
-        self.dismiss(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
 }
