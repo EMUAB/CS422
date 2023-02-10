@@ -8,13 +8,20 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import cs.mad.week5lab.FlashcardDao
 import cs.mad.week5lab.R
 import cs.mad.week5lab.entities.Flashcard
+import cs.mad.week5lab.runOnIO
 
-class FlashcardAdapter(dataSet: List<Flashcard>): RecyclerView.Adapter<FlashcardAdapter.ViewHolder>() {
+class FlashcardAdapter(
+    dataSet: List<Flashcard>,
+    private val dao: FlashcardDao,
+    private val setTitle: String
+) :
+    RecyclerView.Adapter<FlashcardAdapter.ViewHolder>() {
     private val data = dataSet.toMutableList()
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView = view.findViewById<TextView>(R.id.term_text)
     }
 
@@ -30,7 +37,7 @@ class FlashcardAdapter(dataSet: List<Flashcard>): RecyclerView.Adapter<Flashcard
             val alert = AlertDialog.Builder(it.context)
                 .setTitle(flashcard.term)
                 .setMessage(flashcard.definition)
-                .setPositiveButton("Edit") { dialog,_ ->
+                .setPositiveButton("Edit") { dialog, _ ->
                     showEditDialog(it.context, position)
                     dialog.dismiss()
                 }
@@ -41,13 +48,15 @@ class FlashcardAdapter(dataSet: List<Flashcard>): RecyclerView.Adapter<Flashcard
 
     override fun getItemCount() = data.size
 
-    fun add(flashcard: Flashcard) {
-        data.add(flashcard)
+    fun updateAddCard(flashcards: List<Flashcard>) {
+        data.clear()
+        data.addAll(flashcards)
         notifyItemInserted(data.size - 1)
     }
 
-    fun removeAt(index: Int) {
-        data.removeAt(index)
+    fun updateRemoveCard(flashcards: List<Flashcard>) {
+        data.clear()
+        data.addAll(flashcards)
         notifyDataSetChanged()
     }
 
@@ -61,16 +70,27 @@ class FlashcardAdapter(dataSet: List<Flashcard>): RecyclerView.Adapter<Flashcard
         val alert = AlertDialog.Builder(context)
             .setCustomTitle(editTitle)
             .setView(editBody)
-            .setNegativeButton("Delete") { dialog,_ ->
-                removeAt(position)
+            .setNegativeButton("Delete") { dialog, _ ->
+                runOnIO {
+                    dao.deleteFlashcard(dao.getFlashcardSetWithFlashcards(setTitle)[0].flashcards[position])
+                    updateRemoveCard(dao.getFlashcardSetWithFlashcards(setTitle)[0].flashcards)
+                }
                 dialog.dismiss()
             }
-            .setNeutralButton("Cancel") { dialog,_ ->
+            .setNeutralButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
-            .setPositiveButton("Done") { dialog,_ ->
-                flashcard.term = editTitle.text.toString()
-                flashcard.definition = editBody.text.toString()
+            .setPositiveButton("Done") { dialog, _ ->
+                runOnIO {
+                    dao.updateFlashcard(
+                        Flashcard(
+                            dao.getFlashcardSetWithFlashcards(setTitle)[0].flashcards[position].uid,
+                            editTitle.text.toString(),
+                            editBody.text.toString(),
+                            setTitle
+                        )
+                    )
+                }
                 notifyItemChanged(position)
                 dialog.dismiss()
             }

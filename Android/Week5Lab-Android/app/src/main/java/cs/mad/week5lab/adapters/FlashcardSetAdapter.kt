@@ -24,14 +24,17 @@ class FlashcardSetAdapter(dataSet: List<FlashcardSet>): RecyclerView.Adapter<Fla
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.textView.text = data[position].setTitle
         holder.itemView.setOnClickListener {
-            it.context.startActivity(Intent(it.context, FlashcardSetDetailActivity::class.java))
+            val intent = Intent(it.context, FlashcardSetDetailActivity::class.java)
+            intent.putExtra("setTitle", data[position].setTitle)
+            it.context.startActivity(intent)
         }
     }
 
     override fun getItemCount() = data.size
 
-    fun add(set: FlashcardSet) {
-        data.add(set)
+    fun updateSets(sets: List<FlashcardSet>) {
+        data.clear()
+        data.addAll(sets)
         notifyItemInserted(data.size - 1)
     }
 }

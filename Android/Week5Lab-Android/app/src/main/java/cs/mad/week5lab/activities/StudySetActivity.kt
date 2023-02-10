@@ -3,26 +3,34 @@ package cs.mad.week5lab.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import cs.mad.week5lab.FlashcardDatabase
 import cs.mad.week5lab.databinding.ActivityStudySetBinding
 import cs.mad.week5lab.entities.Flashcard
-import cs.mad.week5lab.entities.getFlashcards
+import cs.mad.week5lab.runOnIO
 
 class StudySetActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStudySetBinding
-    private val flashcards = getFlashcards().toMutableList()
-    private val totalAmount = flashcards.size
+    private var flashcards: MutableList<Flashcard> = listOf<Flashcard>().toMutableList()
+    private var totalAmount = 0
     private var isShowingDefinition = false
     private var position = 0
         set(value) = if (value == flashcards.size) field = 0 else field = value
     private var missed = mutableListOf<Flashcard>()
     private var correct = 0
     private var completed = 0
-    private val isComplete get() = flashcards.size == 0
+    private val isComplete get() = flashcards.isEmpty()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStudySetBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        runOnIO {
+            flashcards = FlashcardDatabase.getInstance(this).flashcardDao.getFlashcardSetWithFlashcards(
+                intent.getStringExtra("setTitle")!!
+            )[0].flashcards.toMutableList()
+        }
+        totalAmount = flashcards.size
 
         binding.currentCard.setOnClickListener {
             isShowingDefinition = !isShowingDefinition

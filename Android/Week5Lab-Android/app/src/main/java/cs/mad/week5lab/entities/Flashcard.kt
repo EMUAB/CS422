@@ -6,17 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Flashcard(
-    @PrimaryKey(autoGenerate = true)
-    val uid: Int = 0,
-    val term: String,
-    val definition: String,
-    val setTitle: String
+    @PrimaryKey(autoGenerate = true) var uid: Int = 0,
+    var term: String,
+    var definition: String,
+    var setTitle: String
 )
-
-//fun getFlashcards(): List<Flashcard> {
-//    val flashcards = mutableListOf<Flashcard>()
-//    for (i in 0..9) {
-//        flashcards.add(Flashcard(i, "Term $i", "Definition $i"))
-//    }
-//    return flashcards
-//}
