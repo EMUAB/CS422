@@ -21,17 +21,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         dao = FlashcardDatabase.getInstance(this).flashcardDao
-
-        val set1 = FlashcardSet(setTitle = "Set 1")
-        val flashcards = listOf(
-            Flashcard(term = "term 1", definition = "def 1", setTitle = "Set 1"),
-            Flashcard(term = "term 2", definition = "def 2", setTitle = "Set 1"),
-            Flashcard(term = "term 3", definition = "def 3", setTitle = "Set 1"),
-        )
-        runOnIO {
-            dao.insertSets(set1)
-            flashcards.forEach { dao.insertCards(it) }
-        }
         var flashcardSets: List<FlashcardSet> = listOf()
         runOnIO { flashcardSets = dao.getAllFlashcardSets() }
         binding.flashcardSetRecycler.adapter = FlashcardSetAdapter(flashcardSets)
@@ -39,10 +28,12 @@ class MainActivity : AppCompatActivity() {
 
     fun addSet(view: View) {
         val adapter = binding.flashcardSetRecycler.adapter as FlashcardSetAdapter
+        var allSets = listOf<FlashcardSet>()
         runOnIO {
             dao.insertSets(FlashcardSet(setTitle = "Set ${dao.getAllFlashcardSets().size + 1}"))
-            adapter.updateSets(dao.getAllFlashcardSets())
+            allSets = dao.getAllFlashcardSets()
         }
+        adapter.updateSets(allSets)
         binding.flashcardSetRecycler.smoothScrollToPosition(adapter.itemCount)
     }
 }

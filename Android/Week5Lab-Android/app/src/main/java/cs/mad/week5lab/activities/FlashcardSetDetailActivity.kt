@@ -24,6 +24,8 @@ class FlashcardSetDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         setTitle = intent.getStringExtra("setTitle")!!
 
+        binding.flashcardSetTitle.text = setTitle
+
         dao = FlashcardDatabase.getInstance(this).flashcardDao
         var flashcards: List<Flashcard> = listOf()
         runOnIO { flashcards = dao.getFlashcardSetWithFlashcards(setTitle)[0].flashcards }
@@ -50,6 +52,7 @@ class FlashcardSetDetailActivity : AppCompatActivity() {
 
     fun addFlashcard(view: View) {
         val adapter = binding.flashcardRecycler.adapter as FlashcardAdapter
+        var flashcards = listOf<Flashcard>()
         runOnIO {
             dao.insertCards(
                 Flashcard(
@@ -58,8 +61,10 @@ class FlashcardSetDetailActivity : AppCompatActivity() {
                     setTitle = setTitle
                 )
             )
-            adapter.updateAddCard(dao.getFlashcardSetWithFlashcards(setTitle)[0].flashcards)
+            flashcards = dao.getFlashcardSetWithFlashcards(setTitle)[0].flashcards
         }
+
+        adapter.updateAddCard(flashcards)
         binding.flashcardRecycler.smoothScrollToPosition(adapter.itemCount)
     }
 

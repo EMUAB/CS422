@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/flashcard_set_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Flashcard Set Title"

@@ -8,10 +8,10 @@ import cs.mad.week5lab.entities.relations.FlashcardSetWithFlashcards
 @Dao
 interface FlashcardDao {
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSets(vararg flashcardSet: FlashcardSet)
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCards(vararg flashcard: Flashcard)
 
     @Transaction
@@ -22,8 +22,12 @@ interface FlashcardDao {
     @Query("SELECT * FROM flashcardSet")
     suspend fun getAllFlashcardSets(): List<FlashcardSet>
 
+    @Transaction
+    @Query("SELECT * FROM flashcard WHERE uid = :uid")
+    suspend fun getFlashcardByUID(uid: Int): Flashcard
+
     @Delete(FlashcardSet::class)
-    suspend fun deleteFlashcardSet(setTitle: String)
+    suspend fun deleteFlashcardSet(flashcardSet: FlashcardSet)
 
     @Delete(Flashcard::class)
     suspend fun deleteFlashcard(flashcard: Flashcard)

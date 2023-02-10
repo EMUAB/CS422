@@ -90,6 +90,7 @@ class FlashcardAdapter(
                             setTitle
                         )
                     )
+                    data[position] = dao.getFlashcardByUID(dao.getFlashcardSetWithFlashcards(setTitle)[0].flashcards[position].uid)
                 }
                 notifyItemChanged(position)
                 dialog.dismiss()
