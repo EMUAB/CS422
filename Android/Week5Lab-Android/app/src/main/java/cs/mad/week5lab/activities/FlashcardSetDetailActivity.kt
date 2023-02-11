@@ -75,4 +75,8 @@ class FlashcardSetDetailActivity : AppCompatActivity() {
         intent.putExtra("setTitle", setTitle)
         startActivity(intent)
     }
+
+    fun deleteSet(view: View) {
+        finish()
+    }
 }

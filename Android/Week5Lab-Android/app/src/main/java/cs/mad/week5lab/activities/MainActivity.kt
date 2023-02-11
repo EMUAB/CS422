@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         var flashcardSets: List<FlashcardSet> = listOf()
         runOnIO { flashcardSets = dao.getAllFlashcardSets() }
         binding.flashcardSetRecycler.adapter = FlashcardSetAdapter(flashcardSets)
+        binding.flashcardSetRecycler.adapter
     }
 
     fun addSet(view: View) {
